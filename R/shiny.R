@@ -64,10 +64,10 @@ live_console <- function(chat, quiet = FALSE) {
 #' @export
 #' @rdname live_console
 live_browser <- function(chat, quiet = FALSE) {
-  check_installed(c("bslib", "shiny", "shinychat"))
+  check_installed(c("bslib", "shiny", "shinyChatR"))
 
   ui <- bslib::page_fillable(
-    shinychat::chat_ui("chat", height = "100%"),
+    shinyChatR::chat_ui("chat", height = "100%"),
     shiny::actionButton(
       "close_btn", "",
       class = "btn-close",
@@ -76,7 +76,7 @@ live_browser <- function(chat, quiet = FALSE) {
   )
   server <- function(input, output, session) {
     for (turn in chat$get_turns()) {
-      shinychat::chat_append_message("chat", list(
+      shinyChatR::chat_append_message("chat", list(
         role = turn@role,
         content = contents_markdown(turn)
       ))
@@ -84,7 +84,7 @@ live_browser <- function(chat, quiet = FALSE) {
 
     shiny::observeEvent(input$chat_user_input, {
       stream <- chat$stream_async(input$chat_user_input)
-      shinychat::chat_append("chat", stream)
+      shinyChatR::chat_append("chat", stream)
     })
 
     shiny::observeEvent(input$close_btn, {
